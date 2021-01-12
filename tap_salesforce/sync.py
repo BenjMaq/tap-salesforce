@@ -117,8 +117,9 @@ def sync_records(sf, catalog_entry, state, counter):
     schema = catalog_entry['schema']
     stream_alias = catalog_entry.get('stream_alias')
     catalog_metadata = metadata.to_map(catalog_entry['metadata'])
+    LOGGER.info('catalog_metadata for %s is %s', catalog_entry['tap_stream_id'], catalog_metadata)
     replication_key = catalog_metadata.get((), {}).get('replication-key')
-    LOGGER.info('replication-key for %s is %s', catalog_entry, replication_key)
+    LOGGER.info('replication-key for %s is %s', catalog_entry['tap_stream_id'], replication_key)
 
     stream_version = get_stream_version(catalog_entry, state)
     activate_version_message = singer.ActivateVersionMessage(stream=(stream_alias or stream),

@@ -522,6 +522,10 @@ class Salesforce():
         catalog_metadata = metadata.to_map(catalog_entry['metadata'])
         replication_key = catalog_metadata.get((), {}).get('replication-key')
 
+        LOGGER.info("replication-key value is {k}".format(
+            k=singer.get_bookmark(state, catalog_entry['tap_stream_id'], replication_key)
+        ))
+
         return (singer.get_bookmark(state,
                                     catalog_entry['tap_stream_id'],
                                     replication_key) or self.default_start_date)

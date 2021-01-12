@@ -117,7 +117,6 @@ def sync_records(sf, catalog_entry, state, counter):
     schema = catalog_entry['schema']
     stream_alias = catalog_entry.get('stream_alias')
     catalog_metadata = metadata.to_map(catalog_entry['metadata'])
-    LOGGER.info('catalog_metadata for %s is %s', catalog_entry['tap_stream_id'], catalog_metadata)
     replication_key = catalog_metadata.get((), {}).get('replication-key')
     LOGGER.info('replication-key for %s is %s', catalog_entry['tap_stream_id'], replication_key)
 
@@ -143,6 +142,7 @@ def sync_records(sf, catalog_entry, state, counter):
                 time_extracted=start_time))
 
         replication_key_value = replication_key and singer_utils.strptime_with_tz(rec[replication_key])
+        LOGGER.info('replication-key-value is %s', replication_key_value)
 
         if sf.pk_chunking:
             if replication_key_value and replication_key_value <= start_time and replication_key_value > chunked_bookmark:

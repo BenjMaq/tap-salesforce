@@ -519,10 +519,15 @@ class Salesforce():
 
 
     def get_start_date(self, state, catalog_entry):
+        LOGGER.info('IN GET_START_DATE')
+        print('IN GET_START_DATE')
         catalog_metadata = metadata.to_map(catalog_entry['metadata'])
         replication_key = catalog_metadata.get((), {}).get('replication-key')
 
         LOGGER.info("replication-key value is {k}".format(
+            k=singer.get_bookmark(state, catalog_entry['tap_stream_id'], replication_key)
+        ))
+        print("replication-key value is {k}".format(
             k=singer.get_bookmark(state, catalog_entry['tap_stream_id'], replication_key)
         ))
 

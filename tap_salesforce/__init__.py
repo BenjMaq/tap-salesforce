@@ -406,9 +406,9 @@ def main_impl():
             do_discover(sf)
         elif args.properties or args.catalog:
             catalog = args.properties or args.catalog.to_dict()
-            LOGGER.info('args.state is ', args.state.to_dict())
-            LOGGER.info(args.state)
-            state = build_state(args.state.to_dict(), catalog)
+            LOGGER.info('args.state is ', str(args.state))
+            LOGGER.info(str(args.state))
+            state = build_state(str(args.state), catalog)
             LOGGER.info('state is ', state)
             do_sync(sf, catalog, state)
     finally:

@@ -245,8 +245,9 @@ def do_discover(sf):
                 mdata, ('properties', prop), 'inclusion', 'unsupported')
 
         if replication_key:
-            mdata = metadata.write(
-                mdata, (), 'valid-replication-keys', [replication_key])
+            mdata = metadata.write(mdata, (), 'valid-replication-keys', [replication_key])
+            mdata = metadata.write(mdata, (), 'replication-key', replication_key)
+            mdata = metadata.write(mdata, (), 'replication-method', "INCREMENTAL")
         else:
             mdata = metadata.write(
                 mdata,
@@ -408,7 +409,6 @@ def main_impl():
         elif args.properties or args.catalog:
             catalog = args.properties or args.catalog.to_dict()
             state = build_state(args.state, catalog)
-            LOGGER.info('state is ', state)
             do_sync(sf, catalog, state)
     finally:
         if sf:

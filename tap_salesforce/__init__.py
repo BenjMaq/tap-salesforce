@@ -71,7 +71,7 @@ def build_state(raw_state, catalog):
         tap_stream_id = catalog_entry['tap_stream_id']
         catalog_metadata = metadata.to_map(catalog_entry['metadata'])
         replication_method = catalog_metadata.get((), {}).get('replication-method')
-
+        LOGGER.info(raw_state)
         version = singer.get_bookmark(raw_state,
                                       tap_stream_id,
                                       'version')
@@ -90,6 +90,7 @@ def build_state(raw_state, catalog):
             replication_key_value = singer.get_bookmark(raw_state,
                                                         tap_stream_id,
                                                         replication_key)
+            LOGGER.info('replication_key_value ', replication_key_value)
             if version is not None:
                 state = singer.write_bookmark(
                     state, tap_stream_id, 'version', version)
@@ -406,9 +407,7 @@ def main_impl():
             do_discover(sf)
         elif args.properties or args.catalog:
             catalog = args.properties or args.catalog.to_dict()
-            LOGGER.info('args.state is ', str(args.state))
-            LOGGER.info(str(args.state))
-            state = build_state(str(args.state), catalog)
+            state = build_state(args.state, catalog)
             LOGGER.info('state is ', state)
             do_sync(sf, catalog, state)
     finally:
